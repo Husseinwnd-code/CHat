@@ -40,6 +40,22 @@
       padding: 8px;
     }
 
+    .chat-actions {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      background: #fafafa;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .clear-chat-btn {
+      background: #d9534f;
+    }
+
+    .clear-chat-btn:hover {
+      background: #c9302c;
+    }
+
     .messages {
       flex: 1;
       padding: 10px;
@@ -95,6 +111,10 @@
       <button onclick="setUsername()">تأكيد</button>
     </div>
 
+    <div class="chat-actions">
+      <button class="clear-chat-btn" onclick="clearChat()">مسح المحادثة</button>
+    </div>
+
     <div class="messages" id="messages"></div>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="اكتب رسالة..." disabled>
@@ -116,6 +136,10 @@
         document.getElementById("sendBtn").disabled = false;
         document.getElementById("messageInput").focus();
       }
+    }
+
+    function clearChat() {
+      document.getElementById("messages").innerHTML = "";
     }
 
     function sendMessage() {
