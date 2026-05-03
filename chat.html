@@ -145,8 +145,12 @@
         messageBox.scrollTop = messageBox.scrollHeight;
       }
     }
-    function clearChat() {
-  document.getElementById("messages").innerHTML = "";
+function clearChat() {
+  const confirmClear = confirm("Are you sure you want to clear all messages?");
+  
+  if (confirmClear) {
+    document.getElementById("messages").innerHTML = "";
+  }
 }
   </script>
 </body>
