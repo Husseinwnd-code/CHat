@@ -203,7 +203,11 @@
   </div>
 
   <script>
+    const STORAGE_KEY = "arabicChatMessages";
     let username = "";
+    let savedMessages = loadMessages();
+
+    renderMessages();
 
     function setUsername() {
       const input = document.getElementById("usernameInput");
@@ -218,46 +222,74 @@
       }
     }
 
+    function loadMessages() {
+      const messages = localStorage.getItem(STORAGE_KEY);
+      return messages ? JSON.parse(messages) : [];
+    }
+
+    function saveMessages() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMessages));
+    }
+
     function clearChat() {
-      document.getElementById("messages").innerHTML = "";
+      savedMessages = [];
+      localStorage.removeItem(STORAGE_KEY);
+      renderMessages();
+    }
+
+    function createMessageElement(message) {
+      const msg = document.createElement("div");
+      msg.className = "message";
+
+      const header = document.createElement("div");
+      header.className = "message-header";
+
+      const nameSpan = document.createElement("span");
+      const strong = document.createElement("strong");
+      strong.textContent = message.username;
+      nameSpan.appendChild(strong);
+
+      const timeSpan = document.createElement("span");
+      timeSpan.textContent = message.time;
+
+      const messageText = document.createElement("div");
+      messageText.className = "message-text";
+      messageText.textContent = message.text;
+
+      header.appendChild(nameSpan);
+      header.appendChild(timeSpan);
+      msg.appendChild(header);
+      msg.appendChild(messageText);
+
+      return msg;
+    }
+
+    function renderMessages() {
+      const messageBox = document.getElementById("messages");
+      messageBox.innerHTML = "";
+      savedMessages.forEach((message) => {
+        messageBox.appendChild(createMessageElement(message));
+      });
+      messageBox.scrollTop = messageBox.scrollHeight;
     }
 
     function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
       if (text !== "" && username !== "") {
-        const messageBox = document.getElementById("messages");
-        const msg = document.createElement("div");
-        msg.className = "message";
-
         const time = new Date();
         const hours = time.getHours().toString().padStart(2, '0');
         const minutes = time.getMinutes().toString().padStart(2, '0');
         const timeStr = `${hours}:${minutes}`;
 
-        const header = document.createElement("div");
-        header.className = "message-header";
-
-        const nameSpan = document.createElement("span");
-        const strong = document.createElement("strong");
-        strong.textContent = username;
-        nameSpan.appendChild(strong);
-
-        const timeSpan = document.createElement("span");
-        timeSpan.textContent = timeStr;
-
-        const messageText = document.createElement("div");
-        messageText.className = "message-text";
-        messageText.textContent = text;
-
-        header.appendChild(nameSpan);
-        header.appendChild(timeSpan);
-        msg.appendChild(header);
-        msg.appendChild(messageText);
-
-        messageBox.appendChild(msg);
+        savedMessages.push({
+          username: username,
+          text: text,
+          time: timeStr
+        });
+        saveMessages();
+        renderMessages();
         input.value = "";
-        messageBox.scrollTop = messageBox.scrollHeight;
       }
     }
   </script>
