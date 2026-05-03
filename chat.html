@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -96,6 +96,7 @@
     </div>
 
     <div class="messages" id="messages"></div>
+    <button onclick="clearChat()">Clear Chat</button>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="اكتب رسالة..." disabled>
       <button onclick="sendMessage()" disabled id="sendBtn">إرسال</button>
@@ -144,6 +145,9 @@
         messageBox.scrollTop = messageBox.scrollHeight;
       }
     }
+    function clearChat() {
+  document.getElementById("messages").innerHTML = "";
+}
   </script>
 </body>
 </html>
